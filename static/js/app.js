@@ -5,5 +5,7 @@ define(function(require) {
         urlArgs: "bust=" + (new Date()).getTime()
     });
 
-    
+    require(['MainView'], function(MainView) {
+        new MainView().render();
+    });
 });

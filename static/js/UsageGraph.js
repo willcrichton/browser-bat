@@ -1,5 +1,9 @@
 define(function(render) {
 
+    //54.07
+    var sites = (DATA['sites'] || []).slice(0, 7)
+    var sum = _.reduce(_.pluck(sites, 1), function(a, b) { return a + b; }, 0);
+
     return Backbone.View.extend({
         className: 'graph',
         render: function() {
@@ -11,8 +15,8 @@ define(function(render) {
                 color: colors[0],
                 drilldown: {
                     name: 'Will',
-                    categories: ['Reddit', 'Facebook', 'Piazza', 'Other'],
-                    data: [10.85, 7.35, 33.06, 2.81],
+                    categories: _.pluck(sites, 0),
+                    data: _.map(_.pluck(sites, 1), function(n) { return Math.round(54.07 * n / sum * 100) / 100; }),
                     color: colors[0]
                 }
             }, {

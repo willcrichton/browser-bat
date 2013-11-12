@@ -3,5 +3,14 @@
 }
 
 .graph {
-    width: 1170px;
+    width: 950px;
+}
+
+.btn-group-vertical {
+    margin-top: 10px;
+    width: 100%;
+}
+
+input[type=text] {
+    height: 33px;
 }

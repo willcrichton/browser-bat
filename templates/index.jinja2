@@ -7,8 +7,24 @@
   </head>
   <body>
     <div class="container" id="main">
-      <div id="content"><div id="chart"></div></div>
-      <div id="dock"></div>
+      <div class="col-md-10" id="content"><div id="chart"></div></div>
+      <div class="col-md-2">
+        <h1>Downloads</h1>
+        <div class="input-group">
+          <input type="text" class="form-control" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+        </div>
+        <div class="btn-group-vertical">
+          <button type="button" class="btn btn-default">lol.pdf</button>
+          <button type="button" class="btn btn-default">nope.jpg</button>
+          <button type="button" class="btn btn-default">nope.avi</button>
+          <button type="button" class="btn btn-default">moredownloads</button>
+          <button type="button" class="btn btn-default">test.img</button>
+          <button type="button" class="btn btn-default">hello.world</button>
+        </div>
+      </div>
     </div>
     <script> var DATA = {{ data }}; </script>
     <script src="/static/js/vendor/jquery-2.0.3.min.js"></script>

@@ -20,7 +20,7 @@ define(function(require) {
 
             this.$el.highcharts({
                 chart: {
-                    type: 'spline',
+                    type: 'column',
                     zoomType: 'x'
                 },
                 title: {

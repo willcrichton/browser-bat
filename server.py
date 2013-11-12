@@ -40,7 +40,11 @@ def analyze():
 
     browser_data['sites'] = sorted(urls.iteritems(), key=operator.itemgetter(1), reverse=True)
 
-    # generate timeline of visitation
+    downloads = []
+    for row in c.execute('SELECT current_path, referrer FROM downloads'):
+        downloads.append({'path': row[0], 'url': row[1]})
+    
+    browser_data['downloads'] = downloads
 
     return redirect(url_for('index'))
 

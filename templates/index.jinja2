@@ -7,22 +7,65 @@
   </head>
   <body>
     <div class="container" id="main">
-      <div class="col-md-10" id="content"><div id="chart"></div></div>
-      <div class="col-md-2">
+      <div class="col-md-10" id="content">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#time" data-toggle="tab">Usage over time</a></li>
+          <li><a href="#total" data-toggle="tab">Total usage</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="time">
+            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#options">Options</button>
+          </div>
+          <div class="tab-pane" id="total"></div>
+        </div>
+      </div>
+      <div class="col-md-2" id="downloads">
         <h1>Downloads</h1>
         <div class="input-group">
           <input type="text" class="form-control" />
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Go!</button>
-          </span>
         </div>
-        <div class="btn-group-vertical">
-          <button type="button" class="btn btn-default">lol.pdf</button>
-          <button type="button" class="btn btn-default">nope.jpg</button>
-          <button type="button" class="btn btn-default">nope.avi</button>
-          <button type="button" class="btn btn-default">moredownloads</button>
-          <button type="button" class="btn btn-default">test.img</button>
-          <button type="button" class="btn btn-default">hello.world</button>
+        <div class="btn-group-vertical" id="dl-list">
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="options">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Options</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Day of the week</label>
+                <div class="col-sm-10">
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="option1"> Monday
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="option2"> Tuesday
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="option3"> Wednesday
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Time of day</label>
+                <div class="col-sm-10">
+                  <select class="form-control">
+                    <option>Midnight - 6:00AM</option>
+                    <option>...</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save options</button>
+          </div>
         </div>
       </div>
     </div>

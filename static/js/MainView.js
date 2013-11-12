@@ -1,18 +1,23 @@
 define(function(require) {
     'use strict';
 
-    var WeekGraph = require('WeekGraph'),
-    UsageGraph = require('UsageGraph');
+    var 
+    WeekGraph  = require('WeekGraph'),
+    UsageGraph = require('UsageGraph'),
+    Downloads  = require('Downloads');
 
     return Backbone.View.extend({
         el: '#main',
         
         render: function() {
-            var $content = this.$('#content');
-            $content.css('height', window.innerHeight - this.$('#dock').height());
+            this.$('#content').css('height', window.innerHeight - this.$('#dock').height());
 
-            $content.append(new WeekGraph().render().el);
-            $content.append(new UsageGraph().render().el);
+            this.$('#time').prepend(new WeekGraph().render().el);
+            this.$('#total').prepend(new UsageGraph().render().el);
+
+            new Downloads();
+
+            return this;
         }
     });
 });

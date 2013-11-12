@@ -1,9 +1,10 @@
-#dock {
-    height: 100px;
+#content {
+    padding-top: 10px;
 }
 
 .graph {
     width: 950px;
+    height: 600px;
 }
 
 .btn-group-vertical {
@@ -12,5 +13,5 @@
 }
 
 input[type=text] {
-    height: 33px;
+    height: 34px;
 }

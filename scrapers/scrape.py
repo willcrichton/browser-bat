@@ -53,14 +53,18 @@ def port_visits_db(cPath):
     srcCur = srcConn.cursor()
     dstCur = dstConn.cursor()
     dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
-            (id integer, url text, visit_time integer, visit_duration integer)")
+            (id integer, url text, visit_time integer, \
+            visit_duration integer)")
     dstConn.commit()
     """ TODO check if table already exists """
     
     rowsScraped = 0
     for (id, url, visit_time, visit_duration) in \
-            srcCur.execute("SELECT id, url, visit_time, visit_duration \
-                    FROM visits"): 
+            srcCur.execute(\
+                """SELECT visits.id, urls.url, 
+                          visits.visit_time, visits.visit_duration 
+                   FROM visits INNER JOIN urls 
+                     ON visits.url = urls.id"""): 
         dstCur.execute("INSERT INTO visits \
                 (id, url, visit_time, visit_duration) \
                 VALUES (?, ?, ?, ?)", (id, url, visit_time, visit_duration))

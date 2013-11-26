@@ -3,7 +3,7 @@
 import sys      # sys.argv
 import os       # environ
 import platform # system, release
-
+import sqlite3 as sql
 
 def config_path(platform, release, browser):
     """ 
@@ -43,7 +43,34 @@ def config_path(platform, release, browser):
         return (True, path)
     else:
         return (False, error)
-            
+           
+def port_visits_db(cPath):
+    if not os.path.exists("databases"):
+        os.makedirs("databases")
+
+    srcConn = sql.connect(cPath + "/History")
+    dstConn = sql.connect("databases/visits")
+    srcCur = srcConn.cursor()
+    dstCur = dstConn.cursor()
+    dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
+            (id integer, url text, visit_time integer, visit_duration integer)")
+    dstConn.commit()
+    """ TODO check if table already exists """
+    
+    rowsScraped = 0
+    for (id, url, visit_time, visit_duration) in \
+            srcCur.execute("SELECT id, url, visit_time, visit_duration \
+                    FROM visits"): 
+        dstCur.execute("INSERT INTO visits \
+                (id, url, visit_time, visit_duration) \
+                VALUES (?, ?, ?, ?)", (id, url, visit_time, visit_duration))
+        rowsScraped += 1;
+        if(rowsScraped % 5000 == 0):
+            print "scraped %d rows!" %rowsScraped
+
+    dstConn.commit()
+    dstConn.close()
+    return
 
 def main():
     if len(sys.argv) != 2:
@@ -56,7 +83,7 @@ def main():
         sys.exit(0)
     else:
         print "ready to scrape from \"%s\"!" % cPathOut[1]
-        # actual scraping code here, in some nice modular way
+        port_visits_db(cPathOut[1])
 
     return
 

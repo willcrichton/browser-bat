@@ -41,30 +41,46 @@
                 <label class="col-sm-2 control-label">Day of the week</label>
                 <div class="col-sm-10">
                   <label class="checkbox-inline">
-                    <input type="checkbox" value="option1"> Monday
+                    <input type="checkbox" value="0"> Sun
                   </label>
                   <label class="checkbox-inline">
-                    <input type="checkbox" value="option2"> Tuesday
+                    <input type="checkbox" value="1"> M
                   </label>
                   <label class="checkbox-inline">
-                    <input type="checkbox" value="option3"> Wednesday
+                    <input type="checkbox" value="2"> T
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="3"> W
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="4"> Th
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="5"> F
+                  </label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" value="6"> Sat
                   </label>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Time of day</label>
                 <div class="col-sm-10">
-                  <select class="form-control">
-                    <option>Midnight - 6:00AM</option>
-                    <option>...</option>
-                  </select>
+                  <table cellpadding="5">
+                    <tr>
+                      <td>From:</td><td><input type="time"></td>
+                    </tr>
+                    <tr>
+                      <td>To:</td><td><input type="time"></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save options</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="weekOpts">Save options</button>
           </div>
         </div>
       </div>

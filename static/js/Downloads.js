@@ -13,10 +13,12 @@ define(function(require) {
         },
 
         search: function() {
-            var search = this.$('input[type=text]').val();
+            var search = this.$('input[type=text]').val().toLowerCase();
             var results = [];
             this.downloads.forEach(function(download) {
-                if (download.url.indexOf(search) > -1 || download.path.indexOf(search) > -1) {
+                var url = download.url.toLowerCase(),
+                    path = download.path.toLowerCase();
+                if (url.indexOf(search) > -1 || path.indexOf(search) > -1) {
                     results.push(download);
                 }
             });

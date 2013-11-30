@@ -11,18 +11,35 @@
         <ul class="nav nav-tabs">
           <li class="active"><a href="#time" data-toggle="tab">Usage over time</a></li>
           <li><a href="#total" data-toggle="tab">Total usage</a></li>
+          <li><a href="#info" data-toggle="tab">General info</a></li>
+          <li class="pull-right"><button class="btn btn-primary btn-sm" onclick="window.location.href='/analyze'">Re-analyze</a></li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="time">
-            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#options">Options</button>
+            <button class="btn btn-default btn-lg" data-toggle="modal" data-target="#options">Options</button>
           </div>
           <div class="tab-pane" id="total"></div>
+          <div class="tab-pane" id="info">
+            <h2>Browser info</h2>
+            <table class="table table-bordered">
+              <tr>
+                <td>Browser cache</td>
+                <td><code>{{ config['cache'] }}</code></td>
+              </tr>
+              <tr>
+                <td>Browser history</td>
+                <td><code>{{ config['history'] }}</code></td>
+              </tr>
+            </table>
+            <h2>DB search</h2>
+            <input type="text" placeholder="Enter a query..." class="form-control">
+          </div>
         </div>
       </div>
       <div class="col-md-2" id="downloads">
         <h1>Downloads</h1>
         <div class="input-group">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" placeholder="Search..." />
         </div>
         <div class="btn-group-vertical" id="dl-list">
         </div>

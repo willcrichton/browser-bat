@@ -11,31 +11,13 @@ define(function(render) {
             categories = ['Will', 'Jie', 'David'],
             name = 'Internet usage',
             data = [{
-                y: 55.11,
+                y: 100,
                 color: colors[0],
                 drilldown: {
                     name: 'Will',
                     categories: _.pluck(sites, 0),
                     data: _.map(_.pluck(sites, 1), function(n) { return Math.round(54.07 * n / sum * 100) / 100; }),
                     color: colors[0]
-                }
-            }, {
-                y: 21.63,
-                color: colors[1],
-                drilldown: {
-                    name: 'Jie',
-                    categories: ['Google', 'AskJeeves', 'AltaVista', 'DuckDuckGo'],
-                    data: [0.83, 1.58, 13.12, 5.43],
-                    color: colors[1]
-                }
-            }, {
-                y: 11.94,
-                color: colors[2],
-                drilldown: {
-                    name: 'David',
-                    categories: ['', '', '', '', '', 'Digg'],
-                    data: [0.12, 0.19, 0.12, 0.36, 0.32, 9.91, 0.50, 0.22],
-                    color: colors[2]
                 }
             }];            
             

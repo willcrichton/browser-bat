@@ -5,6 +5,9 @@ import os       # environ
 import platform # system, release
 import sqlite3 as sql
 
+DB_DIR = 'databases'
+DB_NAME = 'visits'
+
 def config_path(platform, release, browser):
     """ 
     returns (false, errMsg) if (platform, release browser) not supported
@@ -21,8 +24,8 @@ def config_path(platform, release, browser):
             path = "/home/%s/.config/google-chrome/Default" \
                     % os.environ["USER"]
         elif platform == "Darwin":
-            path = "/Users/%s/Library/Application Support" \
-                    + "/Google/Chrome/Default" \
+            path = ("/Users/%s/Library/Application Support" \
+                    + "/Google/Chrome/Default") \
                     % os.environ["USER"]
         elif platform == "Windows" and release == "XP":
             path = "C:\\Documents and Settings\\%s" \
@@ -45,11 +48,12 @@ def config_path(platform, release, browser):
         return (False, error)
            
 def port_visits_db(cPath):
-    if not os.path.exists("databases"):
-        os.makedirs("databases")
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    if not os.path.exists(DB_DIR):
+        os.makedirs(DB_DIR)
 
     srcConn = sql.connect(cPath + "/History")
-    dstConn = sql.connect("databases/visits")
+    dstConn = sql.connect(DB_DIR + '/' + DB_NAME)
     srcCur = srcConn.cursor()
     dstCur = dstConn.cursor()
     dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
@@ -60,14 +64,15 @@ def port_visits_db(cPath):
     
     rowsScraped = 0
     for (id, url, visit_time, visit_duration) in \
-            srcCur.execute(\
+        srcCur.execute(\
                 """SELECT visits.id, urls.url, 
-                          visits.visit_time, visits.visit_duration 
+                visits.visit_time, visits.visit_duration 
                    FROM visits INNER JOIN urls 
                      ON visits.url = urls.id"""): 
+        new_time = (visit_time - 11644473600000000) / 1000000
         dstCur.execute("INSERT INTO visits \
                 (id, url, visit_time, visit_duration) \
-                VALUES (?, ?, ?, ?)", (id, url, visit_time, visit_duration))
+                VALUES (?, ?, ?, ?)", (id, url, new_time, visit_duration))
         rowsScraped += 1;
         if(rowsScraped % 5000 == 0):
             print "scraped %d rows!" %rowsScraped
@@ -80,7 +85,7 @@ def main():
     if len(sys.argv) != 2:
         print "USAGE: %s <browser_name>" % sys.argv[0]
         sys.exit(0)
-    
+
     cPathOut = config_path(platform.system(), platform.release(), sys.argv[1])
     if cPathOut[0] == False:
         print cPathOut[1]

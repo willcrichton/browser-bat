@@ -1,42 +1,50 @@
 define(function(require) {
     'use strict';
 
-    function genData() {
-        var data = [];
-        var start = 0;
-        var datum = Math.round(Math.random() * 10);
-        for (var i = 0; i < 100; i++) {
-            start += Math.floor(Math.random() * 10000000);
-            datum += Math.random() * 1- 0.5;
-            if (datum < 0) datum = 0;
-            if (datum > 10) datum = 10;
-            data.push([start, datum]);
-        }
-        return data;
+    function toDate(time) {
+        return new Date(time * 1000);
     }
-
+    
+    var data = [];
+    DATA.histogram.forEach(function(row) {
+        console.log(toDate(row[1]));
+        data.push([toDate(row[1]), row[0]]);
+    });
 
     return Backbone.View.extend({
         className: 'graph',
 
         update: function() {
             var days = $(':checkbox:checked').map(function(){ 
-                return 'strftime("%w") = ' + this.value; 
+                return 'strftime("%w", d) = "' + this.value + '"'; 
             }).get().join(' or ');
 
             var times = $('[type=time]').map(function(isEnd){ 
                 if (this.value == '') return '1';
                 var matches = this.value.match(/(\d+):(\d+)/);
                 var op = isEnd ? '<=' : '>=';
-                return 'strftime("%H") ' + op + matches[1];
+                return 'strftime("%H", d) ' + op + '"' + matches[1] + '"';
             }).get().join(' and ');
             
             var where = '(' + days + ') and (' + times + ')';
-            var query = 'select * from ____ where ' + where;
+            var query = 'select count(*), visit_time, datetime(visit_time, "unixepoch") as d from visits where ' + where + ' group by strftime("%Y%j", d)';
+            console.log(query);
 
             this.$el.highcharts().series.forEach(function(series) {
-                    series.setData(genData());
+                $.ajax({
+                    url: '/query',
+                    data: {'q': query},
+                    success: function(result) {
+                        var rows = JSON.parse(result);
+                        var newData = [];
+                        rows.forEach(function(row) {
+                            newData.push([toDate(row[1]), row[0]])
+                        });
+                        series.setData(newData);
+                    }
+                });
             });
+
             // TODO: something with this query, change graph, etc.
             console.log(query);
         },
@@ -44,10 +52,9 @@ define(function(require) {
         render: function() {
             $('#weekOpts').click(_.bind(this.update, this));
 
-
             this.$el.highcharts({
                 chart: {
-                    type: 'column',
+                    type: 'spline',
                     zoomType: 'x'
                 },
                 title: {
@@ -79,13 +86,7 @@ define(function(require) {
                 },
                 series: [{
                     name: 'Will',
-                    data: genData()
-                }, {
-                    name: 'Jie',
-                    data: genData()
-                }, {
-                    name: 'David',
-                    data: genData()
+                    data: data
                 }]
             });
             

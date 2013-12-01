@@ -26,7 +26,6 @@ def index():
 
     browser_data['sites'] = sorted(urls.iteritems(), key=operator.itemgetter(1), reverse=True)
 
-    #query = 'SELECT url, datetime(visit_time, "unixepoch") AS d FROM visits WHERE d > "2013-11-10"'
     query = 'SELECT count(*), visit_time, datetime(visit_time, "unixepoch") AS d FROM visits GROUP BY strftime("%Y%j", d)'
     num_visits = []
     for row in db.execute(query):

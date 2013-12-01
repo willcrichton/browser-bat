@@ -2,12 +2,11 @@ define(function(require) {
     'use strict';
 
     function toDate(time) {
-        return new Date(time * 1000);
+        return new Date(time * 1000).getTime();
     }
     
     var data = [];
     DATA.histogram.forEach(function(row) {
-        console.log(toDate(row[1]));
         data.push([toDate(row[1]), row[0]]);
     });
 
@@ -15,6 +14,11 @@ define(function(require) {
         className: 'graph',
 
         update: function() {
+            if (!$(':checkbox:checked').length) {
+                this.render();
+                return;
+            }
+            
             var days = $(':checkbox:checked').map(function(){ 
                 return 'strftime("%w", d) = "' + this.value + '"'; 
             }).get().join(' or ');
@@ -30,23 +34,31 @@ define(function(require) {
             var query = 'select count(*), visit_time, datetime(visit_time, "unixepoch") as d from visits where ' + where + ' group by strftime("%Y%j", d)';
             console.log(query);
 
-            this.$el.highcharts().series.forEach(function(series) {
-                $.ajax({
-                    url: '/query',
-                    data: {'q': query},
-                    success: function(result) {
-                        var rows = JSON.parse(result);
-                        var newData = [];
-                        rows.forEach(function(row) {
-                            newData.push([toDate(row[1]), row[0]])
-                        });
-                        series.setData(newData);
-                    }
-                });
-            });
+            $.ajax({
+                url: '/query',
+                data: {'q': query},
+                success: _.bind(function(result) {
+                    var rows = JSON.parse(result);
+                    var keys = [], values = [];
+                    rows.forEach(function(row) {
+                        keys.push(new Date(row[1] * 1000).toDateString());
+                        values.push(row[0]);
+                    });
 
-            // TODO: something with this query, change graph, etc.
-            console.log(query);
+                    this.$el.highcharts({
+                        chart: {
+                            type: 'column'
+                        },
+                        xAxis: {
+                            categories: keys
+                        },
+                        title: {
+                            text: 'Internet usage over time'
+                        },
+                        series: [{name: 'Will', data: values}]
+                    });
+                }, this)
+            });
         },
         
         render: function() {

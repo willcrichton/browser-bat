@@ -46,11 +46,9 @@ def index():
 
 @app.route('/analyze')
 def analyze():
-    cPathOut = config_path(platform.system(), platform.release(), 'chrome')
-    if not cPathOut[0]:
-        raise Exception(cPathOut[1])
-    else:
-        port_visits_db(cPathOut[1])
+    ret = do_scrape()
+    if not ret[0]:
+        raise Exception(ret[1])
 
     return redirect(url_for('index'))
 

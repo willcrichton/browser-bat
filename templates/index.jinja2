@@ -4,6 +4,7 @@
     <title>Browser Bat</title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700" rel="stylesheet" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/highslide.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
@@ -11,6 +12,7 @@
       <div class="col-md-10" id="content">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#time" data-toggle="tab">Usage over time</a></li>
+          <li><a href="#freq" data-toggle="tab">Usage frequency</a></li>
           <li><a href="#total" data-toggle="tab">Total usage</a></li>
           <li><a href="#info" data-toggle="tab">General info</a></li>
           <li class="pull-right"><button class="btn btn-primary btn-sm" onclick="window.location.href='/analyze'">Re-analyze</button></li>
@@ -19,6 +21,7 @@
           <div class="tab-pane active" id="time">
             <button class="btn btn-default btn-lg" data-toggle="modal" data-target="#options">Options</button>
           </div>
+          <div class="tab-pane" id="freq"></div>
           <div class="tab-pane" id="total"></div>
           <div class="tab-pane" id="info">
             <h2>Browser info</h2>
@@ -107,7 +110,9 @@
     </div>
     <script> var DATA = {{ data }}; </script>
     <script src="/static/js/vendor/jquery-2.0.3.min.js"></script>
+    <script src="/static/js/vendor/parseuri.js"></script>
     <script src="/static/js/vendor/highcharts.js"></script>
+    <script src="/static/js/vendor/highslide-full.min.js"></script>
     <script src="/static/js/vendor/bootstrap.min.js"></script>
     <script src="/static/js/vendor/underscore-min.js"></script>
     <script src="/static/js/vendor/backbone-min.js"></script>

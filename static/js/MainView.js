@@ -4,6 +4,7 @@ define(function(require) {
     var 
     WeekGraph  = require('WeekGraph'),
     UsageGraph = require('UsageGraph'),
+    FreqGraph  = require('FreqGraph'),
     Downloads  = require('Downloads');
 
     return Backbone.View.extend({
@@ -32,6 +33,7 @@ define(function(require) {
 
             this.$('#time').prepend(new WeekGraph().render().el);
             this.$('#total').prepend(new UsageGraph().render().el);
+            this.$('#freq').prepend(new FreqGraph().render().el);
 
             new Downloads();
 

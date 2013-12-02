@@ -10,28 +10,46 @@ define(function(require) {
         data.push([toDate(row[1]), row[0]]);
     });
 
+    Date.prototype.dayofYear = function(){
+        var d= new Date(this.getFullYear(), 0, 0);
+        return Math.floor((this-d)/8.64e+7);
+    }
+
+    hs.graphicsDir = '/static/graphics/';
+    hs.outlineType = 'rounded-white';
+    hs.wrapperClassName = 'draggable-header';
+    hs.captionEval = 'this.a.title';
+    hs.showCredits = false;
+    hs.marginTop = 20;
+    hs.marginRight = 20;
+    hs.marginBottom = 20;
+    hs.marginLeft = 20;
+
     return Backbone.View.extend({
         className: 'graph',
 
         update: function() {
-            if (!$(':checkbox:checked').length) {
+            /*if (!$(':checkbox:checked').length) {
                 this.render();
                 return;
-            }
-            
-            var days = $(':checkbox:checked').map(function(){ 
-                return 'strftime("%w", d) = "' + this.value + '"'; 
-            }).get().join(' or ');
+            }*/
+
+            var days = $(':checkbox:checked').length 
+                ? $(':checkbox:checked').map(function(){ 
+                    return 'strftime("%w", d) = "' + this.value + '"'; 
+                   }).get().join(' or ')
+                : '1';
 
             var times = $('[type=time]').map(function(isEnd){ 
                 if (this.value == '') return '1';
                 var matches = this.value.match(/(\d+):(\d+)/);
                 var op = isEnd ? '<=' : '>=';
-                return 'strftime("%H", d) ' + op + '"' + matches[1] + '"';
+                return 'cast(strftime("%H", d) as int) ' + op + matches[1];
             }).get().join(' and ');
             
             var where = '(' + days + ') and (' + times + ')';
             var query = 'select count(*), visit_time, datetime(visit_time, "unixepoch") as d from visits where ' + where + ' group by strftime("%Y%j", d)';
+
             console.log(query);
 
             $.ajax({
@@ -94,7 +112,45 @@ define(function(require) {
                     borderWidth: 0
                 },
                 plotOptions: {
-                    spline: { marker: { enabled: false } }
+                    spline: { marker: { enabled: false } },
+                    series: {
+                        cursor: 'pointer',
+                        point: {events: {click: function() {
+                            var date = new Date(this.x);
+                            var query = 'select url, datetime(visit_time, "unixepoch") as d from visits where strftime("%Y%j", d) = "' + date.getFullYear().toString() + date.dayofYear().toString() + '"';
+                            $.ajax({
+                                url: '/query',
+                                data: {q: query},
+                                success: _.bind(function(result) {
+                                    var data = JSON.parse(result);
+                                    var sites = {};
+                                    data.forEach(function(url) {
+                                        var host = parseUri(url).host;
+                                        if (!sites[host]) { 
+                                            sites[host] = 0;
+                                        }
+                                        sites[host]++;
+                                    });
+
+                                    sites = $.map(sites, function(count, site) {
+                                        return [[count, site]];
+                                    }).sort(function(a, b) { return b[0] - a[0]; });
+
+                                    var content = $.map(sites.slice(0, 3), function(arr) {
+                                        return arr[1] + ': ' + arr[0]
+                                    }).join('<br />');
+                                    
+                                    hs.htmlExpand(null, {
+                                        pageOrigin: {x: this.pageX, y: this.pageY},
+                                        headingText: date.toDateString(),
+                                        maincontentText: content,
+                                        width: 200
+                                    });
+                                }, this)
+                            });
+                        }}}
+                    }
+
                 },
                 series: [{
                     name: 'Will',

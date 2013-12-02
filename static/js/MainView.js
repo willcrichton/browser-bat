@@ -8,6 +8,24 @@ define(function(require) {
 
     return Backbone.View.extend({
         el: '#main',
+
+        events: {
+            'keypress #db-query': 'query'
+        },
+
+        query: function(e) {
+            if (e.which != 13) return;
+            $.ajax({
+                url: '/query',
+                data: {'q': this.$('#db-query').val()},
+                success: _.bind(function(result) {
+                    this.$('#query-output').html(result);
+                }, this),
+                error: _.bind(function(err) {
+                    this.$('#query-output').html('Error! Check your syntax?');
+                }, this)
+            });
+        },
         
         render: function() {
             this.$('#content').css('height', window.innerHeight - this.$('#dock').height());

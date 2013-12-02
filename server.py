@@ -41,7 +41,7 @@ def index():
 
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
-                           config={'cache': 'lol', 'history': 'wut'})
+                           config={'cache': 'lol', 'history': config_path(platform.system(), platform.release(), 'chrome')[1]})
 
 @app.route('/analyze')
 def analyze():
@@ -58,8 +58,8 @@ def query():
     db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
     query = db.execute(request.args['q'])
     output = [row for row in query]
-    return json.dumps(output)
+    return json.dumps(output, indent=4, separators=(',', ': '))
     
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

@@ -37,13 +37,16 @@
             </table>
             <h2>DB search</h2>
             <input type="text" placeholder="Enter a query..." class="form-control" id="db-query" />
-            <span class="help-block">For example: <code>SELECT * FROM visits LIMIT 10</code></span>
+            <span class="help-block">
+              For example: <code>SELECT * FROM visits LIMIT 10</code><br />
+              Tables to query: <code>visits</code>, <code>downloads</code>
+            </span>
             <pre id="query-output"></pre>
           </div>
         </div>
       </div>
       <div class="col-md-2" id="downloads">
-        <h1>Downloads</h1>
+        <h2>Downloads</h2>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search..." />
         </div>

@@ -1,5 +1,15 @@
 body {
     font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding-bottom: 20px;
+    background: #e8e8e8;
+}
+
+.container {
+    background: white;
+}
+
+h1, h2, h3 {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 #content {

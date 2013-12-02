@@ -15,3 +15,15 @@
 input[type=text] {
     height: 34px;
 }
+
+#dl-list button {
+    overflow: hidden;
+}
+
+#dl-list .popover-content {
+    word-break: break-all;
+}
+
+#dl-list code {
+    white-space: normal;
+}

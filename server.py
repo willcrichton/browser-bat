@@ -33,11 +33,11 @@ def index():
 
     browser_data['histogram'] = num_visits
 
-    '''downloads = []
-    for row in c.execute('SELECT current_path, referrer FROM downloads'):
-        downloads.append({'path': row[0], 'url': row[1]})'''
+    downloads = []
+    for (path,) in db.execute('SELECT path FROM downloads'):
+        downloads.append({'path': path, 'name': os.path.basename(path)})
     
-    browser_data['downloads'] = []
+    browser_data['downloads'] = downloads
 
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
@@ -62,4 +62,4 @@ def query():
     
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(debug=True)

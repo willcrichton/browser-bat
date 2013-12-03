@@ -14,11 +14,6 @@ DB_DIR = 'databases'
 DB_NAME = 'visits'
 
 def port_visits_db(scraper, dstCur):
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
-    if not os.path.exists(DB_DIR):
-        os.makedirs(DB_DIR)
-    
-    
     rowsScraped = 0
     for (id, url, visit_time, visit_duration, browser) in scraper.scrape_visits():
         dstCur.execute("INSERT INTO visits \
@@ -40,6 +35,10 @@ def port_visits_db(scraper, dstCur):
     return
 
 def do_scrape():
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    if not os.path.exists(DB_DIR):
+        os.makedirs(DB_DIR)
+
     dstConn = sql.connect(DB_DIR + '/' + DB_NAME)
     dstCur = dstConn.cursor()
     dstCur.execute("DROP TABLE IF EXISTS visits")
@@ -56,8 +55,8 @@ def do_scrape():
         scraper = s()
         if(scraper.isReady() == True):
             port_visits_db(scraper, dstCur)
-        else:
-            return (False, "Scraper %s not ready!" % scraper.__class__.__name__)
+        #else:
+        #    return (False, "Scraper %s not ready!" % scraper.__class__.__name__)
 
     dstConn.commit()
     dstConn.close()

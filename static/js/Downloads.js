@@ -16,18 +16,17 @@ define(function(require) {
             var search = this.$('input[type=text]').val().toLowerCase();
             var results = [];
             this.downloads.forEach(function(download) {
-                var url = download.url.toLowerCase(),
-                    path = download.path.toLowerCase();
-                if (url.indexOf(search) > -1 || path.indexOf(search) > -1) {
+                if (download.name.toLowerCase().indexOf(search) > -1) {
                     results.push(download);
                 }
             });
             
             this.$('#dl-list').html('');
             _.forEach(results, function(result) {
-                var file = result.path.replace(/^.*[\\\/]/, '')
-                this.$('#dl-list').append('<button class="btn btn-default">' + file + '</button>');
+                this.$('#dl-list').append('<button class="btn btn-default" data-toggle="popover" data-html="true" data-content="Copy this link into your URL bar:<br /><code>file://' + result.path + '</code>" data-placement="left">' + result.name + '</button>');
             }, this);
+
+            this.$('#dl-list button').popover();
         }
     });
 });

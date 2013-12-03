@@ -1,3 +1,17 @@
+body {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding-bottom: 20px;
+    background: #e8e8e8;
+}
+
+.container {
+    background: white;
+}
+
+h1, h2, h3 {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 #content {
     padding-top: 10px;
 }
@@ -14,4 +28,16 @@
 
 input[type=text] {
     height: 34px;
+}
+
+#dl-list button {
+    overflow: hidden;
+}
+
+#dl-list .popover-content {
+    word-break: break-all;
+}
+
+#dl-list code {
+    white-space: normal;
 }

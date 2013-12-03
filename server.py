@@ -26,7 +26,6 @@ def index():
 
     browser_data['sites'] = sorted(urls.iteritems(), key=operator.itemgetter(1), reverse=True)
 
-    #query = 'SELECT url, datetime(visit_time, "unixepoch") AS d FROM visits WHERE d > "2013-11-10"'
     query = 'SELECT count(*), visit_time, datetime(visit_time, "unixepoch") AS d FROM visits GROUP BY strftime("%Y%j", d)'
     num_visits = []
     for row in db.execute(query):
@@ -34,15 +33,15 @@ def index():
 
     browser_data['histogram'] = num_visits
 
-    '''downloads = []
-    for row in c.execute('SELECT current_path, referrer FROM downloads'):
-        downloads.append({'path': row[0], 'url': row[1]})'''
+    downloads = []
+    for (path,) in db.execute('SELECT path FROM downloads'):
+        downloads.append({'path': path, 'name': os.path.basename(path)})
     
-    browser_data['downloads'] = []
+    browser_data['downloads'] = downloads
 
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
-                           config={'cache': 'lol', 'history': 'wut'})
+                           config={'cache': 'lol', 'history': config_path(platform.system(), platform.release(), 'chrome')[1]})
 
 @app.route('/analyze')
 def analyze():
@@ -57,7 +56,7 @@ def query():
     db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
     query = db.execute(request.args['q'])
     output = [row for row in query]
-    return json.dumps(output)
+    return json.dumps(output, indent=4, separators=(',', ': '))
     
 
 if __name__ == '__main__':

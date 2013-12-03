@@ -24,6 +24,8 @@ def port_visits_db(scraper):
     dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
             (id integer, url text, visit_time integer, \
             visit_duration integer)")
+    dstCur.execute("CREATE TABLE IF NOT EXISTS downloads \
+            (id integer, path text)")
     dstConn.commit()
     """ TODO check if table already exists """
     
@@ -36,6 +38,15 @@ def port_visits_db(scraper):
         if(rowsScraped % 5000 == 0):
             print "%s: scraped %d rows!" % \
                   (scraper.__class__.__name__, rowsScraped)
+
+    rowsScraped = 0
+    for (id, path) in srcCur.execute("SELECT id, current_path FROM downloads"):
+        if path == "": continue
+        dstCur.execute("INSERT INTO downloads (id, path) VALUES(?, ?)",
+                       (id, path))
+        rowsScraped += 1
+        if(rowsScraped % 100 == 0):
+            print "scraped %d downloads!" %rowsScraped
 
     dstConn.commit()
     dstConn.close()

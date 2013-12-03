@@ -4,9 +4,11 @@ import sys      # sys.argv
 import os       # environ
 import platform # system, release
 import sqlite3 as sql
-from scrapers.chrome import ChromeScraper
 
-SCRAPERS = [ChromeScraper]
+from scrapers.chrome import ChromeScraper
+from scrapers.firefox import FirefoxScraper
+
+SCRAPERS = [ChromeScraper, FirefoxScraper]
 
 DB_DIR = 'databases'
 DB_NAME = 'visits'
@@ -18,6 +20,7 @@ def port_visits_db(scraper):
     
     dstConn = sql.connect(DB_DIR + '/' + DB_NAME)
     dstCur = dstConn.cursor()
+    dstCur.execute("DROP TABLE IF EXISTS visits")
     dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
             (id integer, url text, visit_time integer, \
             visit_duration integer)")
@@ -49,4 +52,4 @@ def do_scrape():
     return (True, "")
 
 if __name__ == "__main__":
-    analyze()
+    do_scrape()

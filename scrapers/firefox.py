@@ -73,3 +73,6 @@ class FirefoxScraper(object):
             yield (id, url, new_time, 0)
 
         return
+
+    def scrape_downloads(self):
+        return []

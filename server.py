@@ -41,7 +41,7 @@ def index():
 
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
-                           config={'cache': 'lol', 'history': config_path(platform.system(), platform.release(), 'chrome')[1]})
+                           config={'cache': 'lol', 'history': ChromeScraper().config_path(platform.system(), platform.release())[1]})
 
 @app.route('/analyze')
 def analyze():

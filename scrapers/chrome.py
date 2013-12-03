@@ -68,3 +68,10 @@ class ChromeScraper(object):
             yield (id, url, new_time, visit_duration)
 
         return
+
+    def scrape_downloads(self):
+      for (id, path) in self.srcCur.execute("SELECT id, current_path FROM downloads"):
+          if path == "": continue
+          else: yield (id, path)
+
+      return

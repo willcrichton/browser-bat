@@ -65,13 +65,13 @@ class ChromeScraper(object):
                        FROM visits INNER JOIN urls 
                          ON visits.url = urls.id"""): 
             new_time = (visit_time - 11644473600000000) / 1000000
-            yield (id, url, new_time, visit_duration)
+            yield (id, url, new_time, visit_duration, "chrome")
 
         return
 
     def scrape_downloads(self):
       for (id, path) in self.srcCur.execute("SELECT id, current_path FROM downloads"):
           if path == "": continue
-          else: yield (id, path)
+          else: yield (id, path, "chrome")
 
       return

@@ -20,19 +20,19 @@ def port_visits_db(scraper, dstCur):
     
     
     rowsScraped = 0
-    for (id, url, visit_time, visit_duration) in scraper.scrape_visits():
+    for (id, url, visit_time, visit_duration, browser) in scraper.scrape_visits():
         dstCur.execute("INSERT INTO visits \
-                (id, url, visit_time, visit_duration) \
-                VALUES (?, ?, ?, ?)", (id, url, visit_time, visit_duration))
+                (id, url, visit_time, visit_duration, browser) \
+                VALUES (?, ?, ?, ?, ?)", (id, url, visit_time, visit_duration, browser))
         rowsScraped += 1;
         if(rowsScraped % 5000 == 0):
             print "%s: scraped %d rows!" % \
                   (scraper.__class__.__name__, rowsScraped)
 
     rowsScraped = 0
-    for (id, path) in scraper.scrape_downloads():
-        dstCur.execute("INSERT INTO downloads (id, path) VALUES(?, ?)",
-                       (id, path))
+    for (id, path, browser) in scraper.scrape_downloads():
+        dstCur.execute("INSERT INTO downloads (id, path, browser) VALUES(?, ?, ?)",
+                       (id, path, browser))
         rowsScraped += 1
         if(rowsScraped % 100 == 0):
             print "scraped %d downloads!" %rowsScraped
@@ -46,9 +46,9 @@ def do_scrape():
     dstCur.execute("DROP TABLE IF EXISTS downloads")
     dstCur.execute("CREATE TABLE IF NOT EXISTS visits \
             (id integer, url text, visit_time integer, \
-            visit_duration integer)")
+            visit_duration integer, browser text)")
     dstCur.execute("CREATE TABLE IF NOT EXISTS downloads \
-            (id integer, path text)")
+            (id integer, path text, browser text)")
     dstConn.commit()
     """ TODO check if table already exists """
 

@@ -74,13 +74,13 @@ class FirefoxScraper(object):
                        on p.id=hv.place_id
                        """): 
             new_time = (visit_time) / 1000000
-            yield (id, url, new_time, 0)
+            yield (id, url, new_time, None, "firefox")
 
         return
 
     def scrape_downloads(self):
         for (id, path) in self.dlCur.execute(\
                 """select id,target from moz_downloads"""):
-            yield (id, path.replace("file://", ""))
+            yield (id, path.replace("file://", ""), "firefox")
 
         return

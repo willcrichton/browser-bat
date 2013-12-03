@@ -16,7 +16,6 @@ class FirefoxScraper(object):
             self.dlCur = srcConn.cursor()
             self.ready = True
         else:
-            print path
             self.ready = False
 
     

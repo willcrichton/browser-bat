@@ -5,6 +5,8 @@ import os
 import sqlite3 as sql
 
 class ChromeScraper(object):
+    name = "Chrome"
+
     def __init__(self):
         (result, path) = self.config_path(platform.system(), platform.release())
         if result:

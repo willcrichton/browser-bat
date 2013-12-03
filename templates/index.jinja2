@@ -24,16 +24,14 @@
           <div class="tab-pane" id="freq"></div>
           <div class="tab-pane" id="total"></div>
           <div class="tab-pane" id="info">
-            <h2>Browser info</h2>
+            <h2>Browser paths</h2>
             <table class="table table-bordered">
+              {% for cfg in config: %}
               <tr>
-                <td>Browser cache</td>
-                <td><code>{{ config['cache'] }}</code></td>
+                <td>{{ cfg.name }}</td>
+                <td><code>{{ cfg.path }}</code></td>
               </tr>
-              <tr>
-                <td>Browser history</td>
-                <td><code>{{ config['history'] }}</code></td>
-              </tr>
+              {% endfor %}
             </table>
             <h2>DB search</h2>
             <input type="text" placeholder="Enter a query..." class="form-control" id="db-query" />

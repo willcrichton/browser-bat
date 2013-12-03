@@ -39,9 +39,13 @@ def index():
     
     browser_data['downloads'] = downloads
 
+    scrapers = [s() for s in SCRAPERS]
+    config = [{'path': s.config_path(platform.system(), platform.release())[1],
+               'name': s.name} for s in scrapers]
+
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
-                           config={'cache': 'lol', 'history': ChromeScraper().config_path(platform.system(), platform.release())[1]})
+                           config=config)
 
 @app.route('/analyze')
 def analyze():

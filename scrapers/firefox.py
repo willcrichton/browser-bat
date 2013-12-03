@@ -1,10 +1,11 @@
 #!/usr/bin/env python2
-
 import platform
 import os
 import sqlite3 as sql
 
 class FirefoxScraper(object):
+    name = "Firefox"
+
     def __init__(self):
         (result, paths) = self.config_path(platform.system(), platform.release())
         if result:
@@ -22,6 +23,15 @@ class FirefoxScraper(object):
     def isReady(self):
         return self.ready
 
+    def get_profiles(self, profiles_path):
+        paths = []
+        for prof_dir in os.listdir(profiles_path):
+            db_path = "%s/%s" % (profiles_path, prof_dir)
+            if(os.access("%s/%s" % (db_path, "places.sqlite"), os.R_OK) \
+               and os.access("%s/%s" % (db_path, "downloads.sqlite"), os.R_OK)):
+                paths.append(db_path)
+        return paths
+
 
     def config_path(self, platform, release):
         """ 
@@ -36,12 +46,11 @@ class FirefoxScraper(object):
 
         if platform == "Linux":
             profiles_path = "%s/.mozilla/firefox" % os.environ["HOME"]
-            for prof_dir in os.listdir(profiles_path):
-                db_path = "%s/%s" % (profiles_path, prof_dir)
-                if(os.access("%s/%s" % (db_path, "places.sqlite"), os.R_OK) \
-                and os.access("%s/%s" % (db_path, "downloads.sqlite"), os.R_OK)):
-                    paths.append(db_path)
-        #elif platform == "Darwin":
+            paths = self.get_profiles(profiles_path)
+        elif platform == "Darwin":
+            profiles_path = ("/Users/%s/Library/Application Support" \
+                            + "/Firefox/Profiles") % os.environ["USER"]
+            paths = self.get_profiles(profiles_path)
             #path = ("/Users/%s/Library/Application Support" \
             #        + "/Google/Chrome/Default") \
             #        % os.environ["USER"]

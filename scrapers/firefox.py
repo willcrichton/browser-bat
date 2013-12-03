@@ -9,8 +9,11 @@ class FirefoxScraper(object):
         (result, paths) = self.config_path(platform.system(), platform.release())
         if result:
             #TODO actually handle multiple paths
-            srcConn = sql.connect(paths[0])
-            self.srcCur = srcConn.cursor()
+            srcConn = sql.connect("%s/%s" % (paths[0], "places.sqlite"))
+            self.visitsCur = srcConn.cursor()
+
+            srcConn = sql.connect("%s/%s" % (paths[0], "downloads.sqlite"))
+            self.dlCur = srcConn.cursor()
             self.ready = True
         else:
             print path
@@ -35,8 +38,9 @@ class FirefoxScraper(object):
         if platform == "Linux":
             profiles_path = "%s/.mozilla/firefox" % os.environ["HOME"]
             for prof_dir in os.listdir(profiles_path):
-                db_path = "%s/%s/places.sqlite" % (profiles_path, prof_dir)
-                if(os.access(db_path, os.R_OK)):
+                db_path = "%s/%s" % (profiles_path, prof_dir)
+                if(os.access("%s/%s" % (db_path, "places.sqlite"), os.R_OK) \
+                and os.access("%s/%s" % (db_path, "downloads.sqlite"), os.R_OK)):
                     paths.append(db_path)
         #elif platform == "Darwin":
             #path = ("/Users/%s/Library/Application Support" \
@@ -63,7 +67,7 @@ class FirefoxScraper(object):
 
     def scrape_visits(self):
         for (id, url, visit_time) in \
-            self.srcCur.execute(\
+            self.visitsCur.execute(\
                     """select hv.id, p.url, hv.visit_date
                        from moz_places as p
                        inner join moz_historyvisits as hv
@@ -75,4 +79,8 @@ class FirefoxScraper(object):
         return
 
     def scrape_downloads(self):
-        return []
+        for (id, path) in self.dlCur.execute(\
+                """select id,target from moz_downloads"""):
+            yield (id, path.replace("file://", ""))
+
+        return

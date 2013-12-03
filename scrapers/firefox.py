@@ -8,7 +8,7 @@ class FirefoxScraper(object):
     def __init__(self):
         (result, paths) = self.config_path(platform.system(), platform.release())
         if result:
-            #TODO actually handle multiple paths
+            #TODO actually handle multiple profiles
             srcConn = sql.connect("%s/%s" % (paths[0], "places.sqlite"))
             self.visitsCur = srcConn.cursor()
 

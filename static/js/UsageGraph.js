@@ -1,6 +1,5 @@
 define(function(render) {
 
-    //54.07
     var sites = (DATA['sites'] || []).slice(0, 7)
     var sum = _.reduce(_.pluck(sites, 1), function(a, b) { return a + b; }, 0);
 
@@ -8,7 +7,7 @@ define(function(render) {
         className: 'graph',
 
         drilldown: function(name) {
-            if (name == "Will") {
+            if (name == DATA.user) {
                 this.render();
                 return;
             }
@@ -56,7 +55,7 @@ define(function(render) {
                         spline: { marker: { enabled: false } }                        
                     },
                     series: [{
-                        name: 'Will',
+                        name: DATA.user,
                         data: series
                     }]
                 });
@@ -67,13 +66,13 @@ define(function(render) {
 
         render: function() {
             var colors = Highcharts.getOptions().colors,
-            categories = ['Will', 'Jie', 'David'],
+            categories = [DATA.user]
             name = 'Internet usage',
             data = [{
                 y: 100,
                 color: colors[0],
                 drilldown: {
-                    name: 'Will',
+                    name: DATA.user,
                     categories: _.pluck(sites, 0),
                     data: _.map(_.pluck(sites, 1), function(n) { return Math.round(54.07 * n / sum * 100) / 100; }),
                     color: colors[0]

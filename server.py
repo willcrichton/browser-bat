@@ -32,6 +32,7 @@ def index():
         num_visits.append(row)
 
     browser_data['histogram'] = num_visits
+    browser_data['user'] = os.environ['USER']
 
     downloads = []
     for (path,) in db.execute('SELECT path FROM downloads'):

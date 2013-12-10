@@ -42,7 +42,7 @@ def index():
     
     browser_data['downloads'] = downloads
 
-    scrapers = [s() for s in SCRAPERS]
+    scrapers = [s() for s in SCRAPERS if s().ready]
     config = [{'path': s.config_path(platform.system(), platform.release())[1],
                'name': s.name} for s in scrapers]
 

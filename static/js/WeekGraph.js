@@ -101,10 +101,14 @@ define(function(require) {
 
                     this.$el.highcharts({
                         chart: {
-                            type: 'column'
+                            type: 'column',
+                            zoomType: 'x'
                         },
                         xAxis: {
-                            categories: keys
+                            categories: keys,
+                            labels: {
+                                rotation: -45
+                            }
                         },
                         title: {
                             text: 'Internet usage over time'

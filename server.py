@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 from flask    import *
 from urlparse import urlparse
 from scrape   import *

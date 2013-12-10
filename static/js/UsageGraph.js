@@ -24,7 +24,7 @@ define(function(render) {
 
                 this.$el.highcharts({
                     chart: {
-                        type: 'spline',
+                        type: 'column',
                         zoomType: 'x'
                     },
                     title: {
@@ -52,7 +52,7 @@ define(function(render) {
                         borderWidth: 0
                     },
                     plotOptions: {
-                        spline: { marker: { enabled: false } }                        
+                        column: { marker: { enabled: false } }                        
                     },
                     series: [{
                         name: DATA.user,

@@ -3,6 +3,7 @@
 import sys      # sys.argv
 import os       # environ
 import platform # system, release
+import time     # timezone
 import sqlite3 as sql
 
 from scrapers.chrome  import ChromeScraper
@@ -18,10 +19,11 @@ def port_visits_db(scraper, dstCur):
 
     # extract visit history
     rowsScraped = 0
+    timeOffset = time.timezone if (time.localtime().tm_isdst == 0) else time.altzone
     for (id, url, visit_time, visit_duration, browser) in scraper.scrape_visits():
         dstCur.execute("INSERT INTO visits \
                 (id, url, visit_time, visit_duration, browser) \
-                VALUES (?, ?, ?, ?, ?)", (id, url, visit_time, visit_duration, browser))
+                VALUES (?, ?, ?, ?, ?)", (id, url, visit_time - timeOffset, visit_duration, browser))
         rowsScraped += 1;
         if(rowsScraped % 5000 == 0):
             print "%s: scraped %d rows!" % \

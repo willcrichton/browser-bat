@@ -1,14 +1,15 @@
 #!/usr/bin/env python2
-
 import platform
 import os
 import sqlite3 as sql
 
 class FirefoxScraper(object):
+    name = "Firefox"
+
     def __init__(self):
         (result, paths) = self.config_path(platform.system(), platform.release())
         if result:
-            #TODO actually handle multiple profiles
+            #TODO actually handle multiple profiles?
             srcConn = sql.connect("%s/%s" % (paths[0], "places.sqlite"))
             self.visitsCur = srcConn.cursor()
 
@@ -22,6 +23,15 @@ class FirefoxScraper(object):
     def isReady(self):
         return self.ready
 
+    def get_profiles(self, profiles_path):
+        paths = []
+        for prof_dir in os.listdir(profiles_path):
+            db_path = "%s/%s" % (profiles_path, prof_dir)
+            if(os.access("%s/%s" % (db_path, "places.sqlite"), os.R_OK) \
+               and os.access("%s/%s" % (db_path, "downloads.sqlite"), os.R_OK)):
+                paths.append(db_path)
+        return paths
+
 
     def config_path(self, platform, release):
         """ 
@@ -29,31 +39,18 @@ class FirefoxScraper(object):
         returns (true, paths) otherwise
 
         Add to this function as we support more platforms and browsers
-        TODO: test on machines other than Ubuntu
+        TODO: windows support
         """
         paths = []
         error = ""
 
         if platform == "Linux":
             profiles_path = "%s/.mozilla/firefox" % os.environ["HOME"]
-            for prof_dir in os.listdir(profiles_path):
-                db_path = "%s/%s" % (profiles_path, prof_dir)
-                if(os.access("%s/%s" % (db_path, "places.sqlite"), os.R_OK) \
-                and os.access("%s/%s" % (db_path, "downloads.sqlite"), os.R_OK)):
-                    paths.append(db_path)
-        #elif platform == "Darwin":
-            #path = ("/Users/%s/Library/Application Support" \
-            #        + "/Google/Chrome/Default") \
-            #        % os.environ["USER"]
-        #elif platform == "Windows" and release == "XP":
-            #path = "C:\\Documents and Settings\\%s" \
-            #        + "\\Local Settings\\Application Data" \
-            #        + "\\Google\\Chrome\\User Data\\Default" \
-            #        % os.environ["USERNAME"]
-        #elif platform == "Windows" and release == "Vista":
-            #path = "C:\\Users\\%s\\AppData\\Local" \
-            #        + "\\Google\\Chrome\\User Data\\Default" \
-            #        % os.environ["USERNAME"]
+            paths = self.get_profiles(profiles_path)
+        elif platform == "Darwin":
+            profiles_path = ("/Users/%s/Library/Application Support" \
+                            + "/Firefox/Profiles") % os.environ["USER"]
+            paths = self.get_profiles(profiles_path)
         else:
             error = "Your platform, %s %s, is not supported" \
                     % (platform, release)

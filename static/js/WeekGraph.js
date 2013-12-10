@@ -118,7 +118,7 @@ define(function(require) {
                                 }}}
                             }
                         },
-                        series: [{name: 'Will', data: values}]
+                        series: [{name: DATA.user, data: values}]
                     });
                 }, this)
             });
@@ -169,7 +169,7 @@ define(function(require) {
                     
                 },
                 series: [{
-                    name: 'Will',
+                    name: DATA.user,
                     data: data
                 }]
             });

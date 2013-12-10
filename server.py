@@ -32,6 +32,7 @@ def index():
         num_visits.append(row)
 
     browser_data['histogram'] = num_visits
+    browser_data['user'] = os.environ['USER']
 
     downloads = []
     for (path,) in db.execute('SELECT path FROM downloads'):
@@ -39,9 +40,13 @@ def index():
     
     browser_data['downloads'] = downloads
 
+    scrapers = [s() for s in SCRAPERS]
+    config = [{'path': s.config_path(platform.system(), platform.release())[1],
+               'name': s.name} for s in scrapers]
+
     # load analysis here
     return render_template('index.jinja2', data=json.dumps(browser_data),
-                           config={'cache': 'lol', 'history': ChromeScraper().config_path(platform.system(), platform.release())[1]})
+                           config=config)
 
 @app.route('/analyze')
 def analyze():

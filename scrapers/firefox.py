@@ -9,7 +9,6 @@ class FirefoxScraper(object):
     def __init__(self):
         (result, paths) = self.config_path(platform.system(), platform.release())
         if result:
-            #TODO actually handle multiple paths
             srcConn = sql.connect("%s/%s" % (paths[0], "places.sqlite"))
             self.visitsCur = srcConn.cursor()
 
@@ -39,7 +38,7 @@ class FirefoxScraper(object):
         returns (true, paths) otherwise
 
         Add to this function as we support more platforms and browsers
-        TODO: test on machines other than Ubuntu
+        TODO: windows support
         """
         paths = []
         error = ""
@@ -51,18 +50,6 @@ class FirefoxScraper(object):
             profiles_path = ("/Users/%s/Library/Application Support" \
                             + "/Firefox/Profiles") % os.environ["USER"]
             paths = self.get_profiles(profiles_path)
-            #path = ("/Users/%s/Library/Application Support" \
-            #        + "/Google/Chrome/Default") \
-            #        % os.environ["USER"]
-        #elif platform == "Windows" and release == "XP":
-            #path = "C:\\Documents and Settings\\%s" \
-            #        + "\\Local Settings\\Application Data" \
-            #        + "\\Google\\Chrome\\User Data\\Default" \
-            #        % os.environ["USERNAME"]
-        #elif platform == "Windows" and release == "Vista":
-            #path = "C:\\Users\\%s\\AppData\\Local" \
-            #        + "\\Google\\Chrome\\User Data\\Default" \
-            #        % os.environ["USERNAME"]
         else:
             error = "Your platform, %s %s, is not supported" \
                     % (platform, release)

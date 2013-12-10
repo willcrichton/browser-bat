@@ -5,10 +5,11 @@ import os       # environ
 import platform # system, release
 import sqlite3 as sql
 
-from scrapers.chrome import ChromeScraper
+from scrapers.chrome  import ChromeScraper
 from scrapers.firefox import FirefoxScraper
+from scrapers.safari  import SafariScraper
 
-SCRAPERS = [ChromeScraper, FirefoxScraper]
+SCRAPERS = [ChromeScraper, FirefoxScraper, SafariScraper]
 
 DB_DIR = 'databases'
 DB_NAME = 'visits'

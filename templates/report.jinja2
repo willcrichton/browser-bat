@@ -18,8 +18,8 @@
         <table class="table table-bordered">
         <thead>
         <tr>
-          <th style="width:50%">URL</th>
-          <th>Visit Time</th>
+          <th style="width: 65%">URL</th>
+          <th style="width: 15%">Visit Time</th>
           <th>Visit Duration</th>
           <th>Browser Used</th>
         </tr>
@@ -27,10 +27,10 @@
         <tbody>
         {% for row in visits[:300]: %}
           <tr>
+            <td style="word-wrap: break-word">{{ row[0] }}</td>
             <td>{{ row[1] }}</td>
             <td>{{ row[2] }}</td>
             <td>{{ row[3] }}</td>
-            <td>{{ row[4] }}</td>
           </tr>
         {% endfor %}
         </tbody>

@@ -8,6 +8,8 @@ import os
 import sqlite3
 import operator
 import platform
+import time
+import datetime
 
 app = Flask(__name__)
 
@@ -69,7 +71,13 @@ def query():
 def report():
     db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
     query = db.execute("select * from visits")
-    output = [row for row in query]
+    output = map(lambda row: [ \
+                  row[1], \
+                  time.ctime(row[2]), \
+                  datetime.timedelta(seconds=row[3]) if row[3] else "", \
+                  row[4] \
+                 ], query)
+
     return render_template('report.jinja2', visits=output)
     
 

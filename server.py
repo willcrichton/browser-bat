@@ -64,6 +64,11 @@ def query():
     query = db.execute(request.args['q'])
     output = [row for row in query]
     return json.dumps(output, indent=4, separators=(',', ': '))
+
+@app.route('/report')
+def report():
+    db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
+    return render_template('report.jinja2')
     
 
 if __name__ == '__main__':

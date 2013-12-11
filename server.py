@@ -68,7 +68,9 @@ def query():
 @app.route('/report')
 def report():
     db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
-    return render_template('report.jinja2')
+    query = db.execute("select * from visits")
+    output = [row for row in query]
+    return render_template('report.jinja2', visits=output)
     
 
 if __name__ == '__main__':

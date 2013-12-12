@@ -67,8 +67,8 @@ def query():
     output = [row for row in query]
     return json.dumps(output, indent=4, separators=(',', ': '))
 
-@app.route('/report')
-def report():
+@app.route('/report_visits')
+def report_visits():
     db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
 
     # data request from DataTables
@@ -109,17 +109,50 @@ def report():
         output['iTotalDisplayRecords'] = db.execute('select count(*) from visits').fetchone()[0]
 
         return json.dumps(output)
-        
-    
-    '''
-    query = db.execute("select * from visits")
-    output = map(lambda row: [ \
-                  row[1], \
-                  time.ctime(row[2]), \
-                  datetime.timedelta(seconds=row[3]) if row[3] else "", \
-                  row[4] \
-                 ], query)'''
 
+@app.route('/report_downloads')
+def report_downloads():
+    db = sqlite3.connect(DB_DIR + '/' + DB_NAME).cursor()
+
+    # data request from DataTables
+    if request.args.get('_'):
+        columns = ('path', 'browser')
+        where = ''
+
+        search = request.args.get('sSearch')
+        if search is not None and search != '':
+            where = 'WHERE ('
+            conds = map(lambda col: ' %s LIKE "%%%s%%" ' % (col, search), columns)
+            where += ' OR '.join(conds) + ')'
+
+        limit = 'LIMIT %s, %s' % (request.args.get('iDisplayStart'), 
+                                  request.args.get('iDisplayLength'))
+        order = 'ORDER BY '
+
+        orders = []
+        for i in range(0, int(request.args.get('iSortingCols'))):
+            col = int(request.args.get('iSortCol_%s' % i))
+            if request.args.get('bSortable_%s' % col) == 'true':
+                orders.append('%s %s' % (columns[col], request.args.get('sSortDir_0')))
+            
+            order += ','.join(orders)
+                
+        q_str = 'select %s from downloads %s %s %s' % (','.join(columns), where, order, limit)
+        print 'Query: %s' % q_str
+        query = db.execute(q_str)
+        output = {'sEcho': int(request.args.get('sEcho')),
+                  'aaData': []}
+        for row in query:
+            output['aaData'].append((row[0],
+                                     row[1]))
+
+        output['iTotalRecords'] = len(output['aaData'])
+        output['iTotalDisplayRecords'] = db.execute('select count(*) from downloads').fetchone()[0]
+
+        return json.dumps(output)
+
+@app.route('/report')
+def report():
     return render_template('report.jinja2')
     
 

@@ -16,17 +16,40 @@
   <body>
     <div class="container" id="main">
       <h1>Browser Bat Report</h1>
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 65%">URL</th>
-            <th style="width: 15%">Date/time</th>
-            <th>Duration</th>
-            <th>Browser</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#visits" data-toggle="tab">Visits</a></li>
+        <li><a href="#downloads" data-toggle="tab">Downloads</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="visits">
+          <table id="visits_table">
+            <thead>
+              <tr>
+                <th style="width: 65%">URL</th>
+                <th style="width: 15%">Date/time</th>
+                <th>Duration</th>
+                <th>Browser</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="downloads">
+          <table id="downloads_table">
+            <thead>
+              <tr>
+                <th style="width: 85%">Path</th>
+                <th style="width: 15%">Browser</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+
     </div>
     <script src="/static/js/vendor/jquery-2.0.3.min.js"></script>
     <script src="/static/js/vendor/bootstrap.min.js"></script>

@@ -36,7 +36,7 @@ def index():
         num_visits.append(row)
 
     browser_data['histogram'] = num_visits
-    browser_data['user'] = os.environ['USER']
+    browser_data['user'] = os.environ['USERNAME' if platform.system() == 'Windows' else 'USER']
 
     downloads = []
     for (path,) in db.execute('SELECT path FROM downloads'):

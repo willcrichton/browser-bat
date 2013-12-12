@@ -32,9 +32,9 @@ class SafariScraper(object):
             
             # safari uses CFTime (http://hintsforums.macworld.com/showthread.php?t=71483)
             # so we offset by unix time since 2001, or 978307200
-            yield (idx, visit[''], float(visit['lastVisitedDate']) + 978307200, 0)
+            yield (idx, visit[''], float(visit['lastVisitedDate']) + 978307200, 0, "safari")
 
     def scrape_downloads(self):
         downloads = self.getPlist(self.path, 'Downloads.plist')
         for (idx, dl) in enumerate(downloads['DownloadHistory']):
-            yield(idx, dl['DownloadEntryPath'])
+            yield(idx, dl['DownloadEntryPath'], "safari")

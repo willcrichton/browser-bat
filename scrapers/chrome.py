@@ -41,13 +41,13 @@ class ChromeScraper(object):
                     + "/Google/Chrome/Default") \
                     % os.environ["USER"]
         elif platform == "Windows" and release == "XP":
-            path = "C:\\Documents and Settings\\%s" \
+            path = ("C:\\Documents and Settings\\%s" \
                     + "\\Local Settings\\Application Data" \
-                    + "\\Google\\Chrome\\User Data\\Default" \
+                    + "\\Google\\Chrome\\User Data\\Default") \
                     % os.environ["USERNAME"]
-        elif platform == "Windows" and release == "Vista":
-            path = "C:\\Users\\%s\\AppData\\Local" \
-                    + "\\Google\\Chrome\\User Data\\Default" \
+        elif platform == "Windows":
+            path = ("C:\\Users\\%s\\AppData\\Local" \
+                    + "\\Google\\Chrome\\User Data\\Default") \
                     % os.environ["USERNAME"]
         else:
             error = "Your platform, %s %s, is not supported" \

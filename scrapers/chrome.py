@@ -67,7 +67,8 @@ class ChromeScraper(object):
                        FROM visits INNER JOIN urls 
                          ON visits.url = urls.id"""): 
             new_time = (visit_time - 11644473600000000) / 1000000
-            yield (id, url, new_time, visit_duration, "chrome")
+            new_duration = visit_duration / 1000000
+            yield (id, url, new_time, new_duration, "chrome")
 
         return
 

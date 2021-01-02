@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 from flask    import *
-from urlparse import urlparse
+from urllib.parse import urlparse
 from scrape   import *
 import json
 import os
@@ -28,7 +28,7 @@ def index():
             urls[url.netloc] = 0
         urls[url.netloc] += 1
 
-    browser_data['sites'] = sorted(urls.iteritems(), key=operator.itemgetter(1), reverse=True)
+    browser_data['sites'] = sorted(iter(urls.items()), key=operator.itemgetter(1), reverse=True)
 
     query = 'SELECT count(*), visit_time, datetime(visit_time, "unixepoch") AS d FROM visits GROUP BY strftime("%Y%j", d)'
     num_visits = []
@@ -79,7 +79,7 @@ def report_visits():
         search = request.args.get('sSearch')
         if search is not None and search != '':
             where = 'WHERE ('
-            conds = map(lambda col: ' %s LIKE "%%%s%%" ' % (col, search), columns)
+            conds = [' %s LIKE "%%%s%%" ' % (col, search) for col in columns]
             where += ' OR '.join(conds) + ')'
 
         limit = 'LIMIT %s, %s' % (request.args.get('iDisplayStart'), 
@@ -95,7 +95,7 @@ def report_visits():
             order += ','.join(orders)
                 
         q_str = 'select %s from visits %s %s %s' % (','.join(columns), where, order, limit)
-        print 'Query: %s' % q_str
+        print('Query: %s' % q_str)
         query = db.execute(q_str)
         output = {'sEcho': int(request.args.get('sEcho')),
                   'aaData': []}
@@ -122,7 +122,7 @@ def report_downloads():
         search = request.args.get('sSearch')
         if search is not None and search != '':
             where = 'WHERE ('
-            conds = map(lambda col: ' %s LIKE "%%%s%%" ' % (col, search), columns)
+            conds = [' %s LIKE "%%%s%%" ' % (col, search) for col in columns]
             where += ' OR '.join(conds) + ')'
 
         limit = 'LIMIT %s, %s' % (request.args.get('iDisplayStart'), 
@@ -138,7 +138,7 @@ def report_downloads():
             order += ','.join(orders)
                 
         q_str = 'select %s from downloads %s %s %s' % (','.join(columns), where, order, limit)
-        print 'Query: %s' % q_str
+        print('Query: %s' % q_str)
         query = db.execute(q_str)
         output = {'sEcho': int(request.args.get('sEcho')),
                   'aaData': []}

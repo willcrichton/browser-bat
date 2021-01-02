@@ -14,7 +14,7 @@ class ChromeScraper(object):
             self.srcCur = srcConn.cursor()
             self.ready = True
         else:
-            print path
+            print(path)
             self.ready = False
 
     

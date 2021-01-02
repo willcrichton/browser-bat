@@ -10,7 +10,7 @@ from scrapers.chrome  import ChromeScraper
 from scrapers.firefox import FirefoxScraper
 from scrapers.safari  import SafariScraper
 
-SCRAPERS = [ChromeScraper, FirefoxScraper, SafariScraper]
+SCRAPERS = [ChromeScraper] #, FirefoxScraper, SafariScraper]
 
 DB_DIR = 'databases'
 DB_NAME = 'visits'
@@ -26,8 +26,8 @@ def port_visits_db(scraper, dstCur):
                 VALUES (?, ?, ?, ?, ?)", (id, url, visit_time - timeOffset, visit_duration, browser))
         rowsScraped += 1;
         if(rowsScraped % 5000 == 0):
-            print "%s: scraped %d rows!" % \
-                  (scraper.__class__.__name__, rowsScraped)
+            print("%s: scraped %d rows!" % \
+                  (scraper.__class__.__name__, rowsScraped))
 
     # extract downloads
     rowsScraped = 0
@@ -36,7 +36,7 @@ def port_visits_db(scraper, dstCur):
                        (id, path, browser))
         rowsScraped += 1
         if(rowsScraped % 100 == 0):
-            print "scraped %d downloads!" %rowsScraped
+            print("scraped %d downloads!" %rowsScraped)
 
     return
 
@@ -50,7 +50,7 @@ def do_scrape():
     # open connection to the database
     dstConn = sql.connect(DB_DIR + '/' + DB_NAME)
     dstCur = dstConn.cursor()
-    
+
     # reset visits and downloads tables
     dstCur.execute("DROP TABLE IF EXISTS visits")
     dstCur.execute("DROP TABLE IF EXISTS downloads")
